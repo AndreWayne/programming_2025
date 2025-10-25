@@ -12,8 +12,8 @@ int main()
     }
     int min_digit_A0 = 9;
     int min_digit_A3 = 9;
-    int tmp1 = A[0];
-    int tmp2 = A[3];
+    int tmp1 = std::abs(A[0]);
+    int tmp2 = std::abs(A[3]);
 
     while (tmp1 > 0) {
         int digit = tmp1 % 10;
