@@ -1,6 +1,5 @@
 ﻿#include <iostream>
 #include <string>
-#include <limits>
 #include <locale.h>
 
 
@@ -9,7 +8,8 @@
 struct Season {
     std::string name;           
     std::string months[3];      
-    std::string nextSeason;     
+    std::string nextSeason;
+    Season* next;
 };
 
 
@@ -56,8 +56,9 @@ void showMenu() {
     std::cout << "2. Показать весь год" << std::endl;
     std::cout << "3. Выйти из программы" << std::endl;
     std::cout << "4. Просмотр Элемента" << std::endl;
+    std::cout << "5. Просмотр цикла от сезона" << std::endl;
     std::cout << "===============================================" << std::endl;
-    std::cout << "Выберите действие (1-4): ";
+    std::cout << "Выберите действие (1-5): ";
 }
 
 
@@ -133,10 +134,41 @@ int chooseMonth(const Season& season) {
     return choice - 1; 
 }
 
+void CicleYear(Season* A) {
+    Season* current = A;
+    int count = 0;
+
+    
+    do {
+        std::cout << A->name << "["
+            << A->months[0] << ", "
+            << A->months[1] << ", "
+            << A->months[2] << "] ";
+
+        A = A->next; 
+        count++;
+
+        
+        if (count < 4) {
+            std::cout << "-> ";
+        }
+
+    } while (current != A && count < 4);
+
+    std::cout << "..." << std::endl;
+    
+}
+
 int main() {
     setlocale(LC_ALL, "Russian");
+
+    
     
     Season seasons[4];
+    seasons[0].next = &seasons[1];
+    seasons[1].next = &seasons[2];
+    seasons[2].next = &seasons[3];
+    seasons[3].next = &seasons[0];
 
     
     setCalendar(seasons);
@@ -192,11 +224,27 @@ int main() {
         case 4:
             printElement(seasons);
             break;
+        case 5: {
+            int choice = chooseSeason();
+            Season* A = &seasons[choice];
+            CicleYear(A);
+            break;
+
+        }
+            
+
+
 
         default:
             std::cout << "Неверный выбор! Пожалуйста, выберите действие от 1 до 4." << std::endl;
         }
     }
 
+
+   
+
     return 0;
+
 }
+
+
